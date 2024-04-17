@@ -1,0 +1,38 @@
+body {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+#upload-button {
+  margin-inline: auto;
+}
+
+#container {
+  display: grid;
+  grid-template-areas:
+  "graph graph overview"
+  "table table table";
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+}
+
+.zone {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 3%;
+    margin: 10px;
+}
+
+#graph {
+  grid-area: graph;
+  /* Add styling for the graph zone */
+}
+
+#overview {
+  grid-area: overview;
+  /* Add styling for the overview zone */
+}
+
+#table {
+  grid-area: table;
+  /* Add styling for the table zone */
+}
