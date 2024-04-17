@@ -38,6 +38,5 @@ function dataToJson(data) {
       updatedAt
     };
   });
-
-  console.log(formattedAnnotations);
+  return formattedAnnotations;
 }

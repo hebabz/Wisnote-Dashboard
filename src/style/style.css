@@ -16,23 +16,34 @@ body {
 }
 
 .zone {
-    border: 1px solid black;
     padding: 10px;
-    border-radius: 3%;
     margin: 10px;
 }
 
 #graph {
   grid-area: graph;
-  /* Add styling for the graph zone */
 }
 
 #overview {
   grid-area: overview;
-  /* Add styling for the overview zone */
 }
 
 #table {
   grid-area: table;
-  /* Add styling for the table zone */
+}
+
+table {
+  margin: auto;
+}
+
+td {
+  /* 10 = number of columns */
+    max-width: calc(100vw / 10);
+    line-break: anywhere;
+}
+
+thead {
+  position: sticky;
+  top: -15px;
+  text-align: center;
 }
