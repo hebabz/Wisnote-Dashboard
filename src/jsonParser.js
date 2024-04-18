@@ -29,7 +29,7 @@ function dataToJson(data) {
     return {
       _id,
       pageUrl,
-      author,
+      author, // /authors to find the name
       connectionType,
       annotationType,
       item: formattedItem,

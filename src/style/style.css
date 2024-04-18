@@ -37,8 +37,6 @@ table {
 }
 
 td {
-  /* 10 = number of columns */
-    max-width: calc(100vw / 10);
     line-break: anywhere;
 }
 
@@ -46,4 +44,12 @@ thead {
   position: sticky;
   top: -15px;
   text-align: center;
+}
+
+.single {
+  width: 40px;
+}
+
+.multiple {
+  width: 80px;
 }
