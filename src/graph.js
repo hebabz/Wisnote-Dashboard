@@ -52,19 +52,21 @@ function fillGraph(tableData) {
     width = 600 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
-  // Append the SVG object to the body of the page
+  // Append the SVG object to the body of the page and make it responsive
   var svg = d3
     .select("#graph")
     .append("svg")
-    .attr("viewBox", `0 0 ${width + (margin.left + margin.right) * 5} ${height + margin.top + margin.bottom}`) //TODO to fix
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .style("max-width", "100%")
+    .style("max-height", "100%")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // x axis is a categorical scale
+  // x axis is a categorical scale and make it responsive
   var xScale = d3
     .scaleBand()
     .domain(formattedWebPages)
-    .range([0, 800])
+    .range([0, width])
     .padding(0.1);
 
   // Append x-axis to the SVG
@@ -86,6 +88,7 @@ function fillGraph(tableData) {
   svg
     .append("g")
     .call(d3.axisLeft(yScale).tickSize(-innerWidth))
+    .style("max-height", "100%")
     .selectAll(".tick line")
     .attr("opacity", 0.1);
 
@@ -117,12 +120,12 @@ dots
     })
     .attr("x", function(d) {
         // Calculate the x position based on the webpage
-        return xScale(d.webpage) + xScale.bandwidth() / 2 - 10; // Adjust the position based on the image size
+        return xScale(d.webpage) + xScale.bandwidth() / 2 - 7.5; // Adjust the position based on the image size
     })
     .attr("y", function(d) {
         // Calculate the y position based on the count
-        return yScale(d.count) - 10; // Adjust the position based on the image size
+        return yScale(d.count) - 7.5; // Adjust the position based on the image size
     })
-    .attr("width", 20) // Set the width of the image
-    .attr("height", 20); // Set the height of the image
+    .attr("width", 15) // Set the width of the image
+    .attr("height", 15); // Set the height of the image
 }

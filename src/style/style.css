@@ -9,10 +9,9 @@ body {
 #container {
   display: grid;
   grid-template-areas:
-  "graph graph overview"
-  "table table table";
-  grid-template-rows: 1fr 1fr;
-  height: 100vh;
+  "graph"
+  "table"
+  "overview";
 }
 
 .zone {
@@ -22,6 +21,7 @@ body {
 
 #graph {
   grid-area: graph;
+  max-height: 70vh;
 }
 
 #overview {
@@ -30,6 +30,7 @@ body {
 
 #table {
   grid-area: table;
+  height: 50vh;
 }
 
 table {
@@ -47,9 +48,9 @@ thead {
 }
 
 .single {
-  width: 40px;
+  width: 20px;
 }
 
 .multiple {
-  width: 80px;
+  width: 40px;
 }

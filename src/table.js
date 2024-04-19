@@ -42,7 +42,10 @@ function fillTable(tableData) {
   webPages.forEach((pageUrl) => {
     const row = document.createElement("tr");
     const pageCell = document.createElement("td");
-    pageCell.textContent = pageUrl;
+    const pageLink = document.createElement("a");
+    pageLink.href = pageUrl;
+    pageLink.textContent = pageUrl;
+    pageCell.appendChild(pageLink);
     row.appendChild(pageCell);
 
     connectionTypes.forEach((connectionType) => {
@@ -62,6 +65,7 @@ function fillTable(tableData) {
           } else {
             img.classList.add("single");
           }
+          img.classList.add("mx-1");
           cell.appendChild(img);
         }
       });
