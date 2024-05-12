@@ -1,5 +1,3 @@
-//https://observablehq.com/@d3/scatterplot-with-shapes?intent=fork
-
 function fromURItoLastPart(uri) {
   const lastSlashIndex = uri.lastIndexOf("/");
   if (lastSlashIndex !== -1) {
