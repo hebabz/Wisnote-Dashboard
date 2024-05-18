@@ -18,15 +18,15 @@ The goal of the project is to generate a visual representation of these annotati
 - Run `npm start` to start the server.
 
 ## How to use
-- Click on the `Upload file` button then 'Choose file' to select the JSON file to upload (the URL version of the upload is not compeltely ready).
+- Click on the `Upload file` button then 'Choose file' to select the JSON file to upload (the URL version of the upload is not completely ready).
 - Find in the `src/examples` folder one example of a valid JSON file to upload.
 
 ## Incoming features
 - Tooltip for each symbol in the table and the graph to display more information.
 - The arrangement is going to evolve to introduce a totally vertical layout with accordion interactions.
-- A color palette will be chosen
+- A color palette will be chosen.
 - Both visualizations will be more interactive.
-- Introduction of a legend zone to explain the meaning of the symbols.
+- Introduction of a caption zone to explain the meaning of the symbols.
 
 ## Technologies
 - D3.js
