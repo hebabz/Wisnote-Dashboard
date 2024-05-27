@@ -14,15 +14,36 @@
   </head>
   <body>
     <div id="header" class="d-flex flex-column m-2">
+      <div class="d-flex flex-column">
       <h1>WISNOTE DASHBOARD</h1>
       <p>By: Héba Bouzidi</br>
       For: I3S laboratory</p>
-      <p>[Summary]</p>
-      <p>[Dates of the collected data]</p>
-      <label for="upload-button">Choose a file to display its content</label>
       <button type="button" id="upload-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fileModal">
         Upload File
       </button>
+    </div>
+    <div id="legend" class="m-2 d-flex flex-column">
+        <h2>Legend</h2>
+        <div>
+          <img id="legend-circle" src="images/circle.png" alt="circle" width="35" height="35">
+          <label for="legend-circle">Question type</label>
+        </div>
+        <div>
+          <img id="legend-square" src="images/square.png" alt="square" width="35" height="35">
+          <label for="legend-square">Comment type</label>
+        </div> 
+        <div>
+          <img id="legend-triangle" src="images/triangle.png" alt="triangle" width="35" height="35">
+          <label for="legend-triangle">Defect type</label>
+        </div>
+        <div>
+          <img id="legend-star" src="images/star.png" alt="star" width="35" height="35">
+          <label for="legend-star">Other type</label>
+        </div>
+      </div>
+      <div class="pitch mt-4">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium sit amet tortor eu tincidunt. Aliquam hendrerit a dolor id convallis. Fusce maximus tempus massa, non aliquam tellus dignissim finibus. Ut dignissim dolor id laoreet bibendum. Orci varius natoque penatibus et magnis dis parturient montes.</p>
+      </div>
     </div>
 
     <!-- Modal -->
@@ -65,8 +86,6 @@
           <tbody id="table-body">
           </tbody>
         </table>
-      </div>
     </div>
-    
   </body>
 </html>

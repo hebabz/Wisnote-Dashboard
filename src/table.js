@@ -64,6 +64,9 @@ function fillTable(tableData) {
             img.classList.add("multiple");
           } else {
             img.classList.add("single");
+            img.setAttribute("data-toggle", "tooltip");
+            img.setAttribute("data-placement", "top")
+            img.setAttribute("title", "test")
           }
           img.classList.add("mx-1");
           cell.appendChild(img);
@@ -73,6 +76,13 @@ function fillTable(tableData) {
     });
     tbody.appendChild(row);
   });
+
+  //enable tooltips withotu jquery
+  document.querySelectorAll('[data-toggle="tooltip"]').forEach((tooltip) => {
+    new bootstrap.Tooltip(tooltip);
+  });
+
+
 }
 
 
