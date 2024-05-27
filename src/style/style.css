@@ -1,9 +1,20 @@
 body {
     font-family: 'Roboto', sans-serif !important;
+    background-color: white;
+}
+
+#legend {
+  position: absolute;
+  right: 100px;
+}
+
+.pitch {
+  margin-right: 360px;
 }
 
 #upload-button {
   margin-inline: auto;
+  margin-top: -60px;
 }
 
 #container {
@@ -49,6 +60,10 @@ thead {
 
 .single {
   width: 20px;
+}
+
+.tooltip.hidden {
+  display: none;
 }
 
 .multiple {

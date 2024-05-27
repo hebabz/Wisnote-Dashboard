@@ -47,16 +47,15 @@ function fillGraph(tableData) {
 
   // Set the dimensions and margins of the graph
   var margin = { top: 20, right: 30, bottom: 30, left: 40 },
-    width = 600 - margin.left - margin.right,
+    width = 1160 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
   // Append the SVG object to the body of the page and make it responsive
   var svg = d3
     .select("#graph")
     .append("svg")
-    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-    .style("max-width", "100%")
-    .style("max-height", "100%")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 " + width + " 400")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -117,13 +116,27 @@ dots
         return "./images/" + symbolsImages[d.annotationType];
     })
     .attr("x", function(d) {
-        // Calculate the x position based on the webpage
+        // Calculate the x position based on the total of x data
         return xScale(d.webpage) + xScale.bandwidth() / 2 - 7.5; // Adjust the position based on the image size
     })
     .attr("y", function(d) {
         // Calculate the y position based on the count
-        return yScale(d.count) - 7.5; // Adjust the position based on the image size
+        return yScale(d.count) - 7.5;
     })
     .attr("width", 15) // Set the width of the image
-    .attr("height", 15); // Set the height of the image
+    .attr("height", 15) // Set the height of the image
+    .on("mouseover", function(e, d) {
+      svg
+        .append("text")
+        .attr("id", "tooltip")
+        .attr("x", xScale(d.webpage) + xScale.bandwidth() / 2)
+        .attr("y", yScale(d.count) - 20)
+        .text("test")
+        .attr("fill", "black");
+      
+    })
+    .on("mouseout", function() {
+      d3.select("#tooltip").remove();
+    });
+    
 }
