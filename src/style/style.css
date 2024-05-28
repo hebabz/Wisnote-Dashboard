@@ -30,18 +30,22 @@ body {
     margin: 10px;
 }
 
-#graph {
-  grid-area: graph;
-  max-height: 70vh;
+.hidden {
+  display: none;
 }
 
-#overview {
-  grid-area: overview;
+.accordion-button:not(.collapsed) {
+  background-color: white!important;
+  color: black!important;
+}
+
+#graph {
+  grid-area: graph;
 }
 
 #table {
   grid-area: table;
-  height: 50vh;
+  max-height: 50vh;
 }
 
 table {
@@ -62,10 +66,15 @@ thead {
   width: 20px;
 }
 
-.tooltip.hidden {
-  display: none;
+.tooltip > .tooltip-inner {
+  text-align: start;
+  max-width: fit-content;
 }
 
 .multiple {
   width: 40px;
+}
+
+#overview {
+  grid-area: overview;
 }

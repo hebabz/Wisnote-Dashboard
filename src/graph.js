@@ -28,7 +28,8 @@ function fillGraph(tableData) {
     "defect": "triangle.png",
     "question": "circle.png",
     "comment": "square.png",
-    "other": "star.png"
+    "other": "star.png",
+    "thesaurus": "star.png",
   };
 
   // Count the number of annotations per webpage
@@ -52,10 +53,10 @@ function fillGraph(tableData) {
 
   // Append the SVG object to the body of the page and make it responsive
   var svg = d3
-    .select("#graph")
+    .select("#graph-svg")
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + width + " 400")
+    .attr("viewBox", "0 0 " + width + " 420")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -88,6 +89,22 @@ function fillGraph(tableData) {
     .style("max-height", "100%")
     .selectAll(".tick line")
     .attr("opacity", 0.1);
+
+    // Append y-axis and x-axis labels to the SVG
+  svg
+    .append("text")
+    .attr("transform", "translate(" + width / 2 + " ," + (height + margin.top + 20) + ")")
+    .style("text-anchor", "middle")
+    .text("Web pages");
+
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Number of annotations");
 
   // Create an array of objects with webpage, annotation type, and count
   var data = [];
@@ -126,17 +143,27 @@ dots
     .attr("width", 15) // Set the width of the image
     .attr("height", 15) // Set the height of the image
     .on("mouseover", function(e, d) {
-      svg
-        .append("text")
+      d3
+        .select("#graph")
+        .append("div")
         .attr("id", "tooltip")
-        .attr("x", xScale(d.webpage) + xScale.bandwidth() / 2)
-        .attr("y", yScale(d.count) - 20)
-        .text("test")
-        .attr("fill", "black");
-      
+        .style("position", "absolute")
+        .style("left", e.pageX + 10 + "px")
+        .style("top", e.pageY + 10 + "px")
+        .style("background-color", "white")
+        .style("border", "1px solid black")
+        .style("padding", "5px")
+        .style("z-index", 1000)
+        .html(
+          "Page name: " +
+            d.webpage +
+            "</br>Annotation Type: " +
+            d.annotationType +
+            "</br>Count: " +
+            d.count
+        );
     })
     .on("mouseout", function() {
       d3.select("#tooltip").remove();
     });
-    
 }

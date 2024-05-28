@@ -18,14 +18,16 @@ function fillTable(tableData) {
     "defect",
     "question",
     "comment",
-    "other"
+    "other",
+    "thesaurus"
   ];
 
   const symbolsImages = {
     "defect": "triangle.png",
     "question": "circle.png",
     "comment": "square.png",
-    "other": "star.png"
+    "other": "star.png",
+    "thesaurus": "star.png",
   };
 
   const headerRow = document.getElementsByTagName("tr")[0];
@@ -65,8 +67,9 @@ function fillTable(tableData) {
           } else {
             img.classList.add("single");
             img.setAttribute("data-toggle", "tooltip");
-            img.setAttribute("data-placement", "top")
-            img.setAttribute("title", "test")
+            img.setAttribute("data-placement", "top");
+            img.setAttribute("data-bs-html", "true");
+            img.setAttribute("title", tooltipContent(annotations[0]));
           }
           img.classList.add("mx-1");
           cell.appendChild(img);
@@ -77,11 +80,34 @@ function fillTable(tableData) {
     tbody.appendChild(row);
   });
 
-  //enable tooltips withotu jquery
+  function tooltipContent(annotation) {
+    var items = "";
+    annotation["item"].forEach((item) => {
+      items += "&nbsp;&nbsp; Item annotated: " + item["objectValue"] + "<br>" +
+      "&nbsp;&nbsp; Item description: " + (item["objectDescription"] ?? item["objectPath"]["objectDescription"]) + "<br>" +
+      "&nbsp;&nbsp; Item type: " + item["objectType"] + "<br><br>";
+    });
+    items = items.slice(0, -8);
+
+    return "Type: " + annotation["annotationType"] + "<br>" +
+    "Author: " + annotation["author"] + "<br>" +
+    "Date: " + formatDate(annotation["createdAt"]) + "<br>" +
+    "Description: " + annotation["body"] + "<br>" +
+    items;
+  }
+
+  function formatDate(date) {
+    return new Date(date).toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+
+  //enable tooltips
   document.querySelectorAll('[data-toggle="tooltip"]').forEach((tooltip) => {
     new bootstrap.Tooltip(tooltip);
   });
-
 
 }
 

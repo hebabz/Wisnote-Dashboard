@@ -16,15 +16,14 @@ function dataToJson(data) {
       updatedAt,
     } = annotation;
     const formattedItem = item.map((obj) => {
-      const { _id, objectType, objectValue, objectDescription, __v } =
-        obj;
-      return {
-        _id,
-        objectType,
+      //obj doesn't always have objectPath, sometimes it simply has description, value, and type
+      const { objectPath, objectDescription, objectValue, objectType } = obj;
+      const formattedObj = {
+        objectDescription: objectDescription ?? objectPath.objectDescription,
         objectValue,
-        objectDescription,
-        __v,
+        objectType,
       };
+      return formattedObj;
     });
     return {
       _id,

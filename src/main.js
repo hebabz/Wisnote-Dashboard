@@ -45,4 +45,7 @@ function uploadFile() {
     console.log("No file selected");
     return;
   }
+  document.querySelectorAll(".zone").forEach((zone) => {
+    zone.classList.remove("hidden");
+  });
 }
