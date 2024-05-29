@@ -26,10 +26,10 @@ function fillGraph(tableData) {
 
   const symbolsImages = {
     "defect": "triangle.png",
-    "question": "circle.png",
+    "question": "diamond.png",
     "comment": "square.png",
     "other": "star.png",
-    "thesaurus": "star.png",
+    "thesaurus": "resource.png",
   };
 
   // Count the number of annotations per webpage

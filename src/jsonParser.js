@@ -16,7 +16,6 @@ function dataToJson(data) {
       updatedAt,
     } = annotation;
     const formattedItem = item.map((obj) => {
-      //obj doesn't always have objectPath, sometimes it simply has description, value, and type
       const { objectPath, objectDescription, objectValue, objectType } = obj;
       const formattedObj = {
         objectDescription: objectDescription ?? objectPath.objectDescription,
@@ -25,16 +24,17 @@ function dataToJson(data) {
       };
       return formattedObj;
     });
+
     return {
       _id,
       pageUrl,
-      author, // /authors to find the name
+      author,
       connectionType,
       annotationType,
       item: formattedItem,
       body,
       createdAt,
-      updatedAt
+      updatedAt,
     };
   });
   return formattedAnnotations;

@@ -64,6 +64,7 @@ thead {
 
 .single {
   width: 20px;
+  
 }
 
 .tooltip > .tooltip-inner {
@@ -73,8 +74,28 @@ thead {
 
 .multiple {
   width: 40px;
+  cursor: pointer;
 }
 
 #overview {
   grid-area: overview;
+}
+
+.block {
+  max-width: 200px;
+  margin-inline: 20px;
+  text-align: center;
+}
+
+.block > p {
+  width: 100%;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg) scale(0.1);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
 }
