@@ -5,10 +5,9 @@
     <link rel="stylesheet" type="text/css" href="style/style.css" />
     <script src="main.js"></script>
     <script src="jsonParser.js"></script>
-    <script src="graph.js"></script>
     <script src="overview.js"></script>
     <script src="table.js"></script>
-    <script src="lib/d3.v7.min.js"></script>
+    <script src="filters.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </head>
@@ -79,70 +78,108 @@
     </div>
 
     <div id="container" class="accordion">
-      <div id="graph" class="zone hidden accordion-item">
-        <h2 class="accordion-header" id="graph-heading">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#graph-svg"
-          aria-expanded="true" aria-controls="graph-svg">
-          Graph of annotations
-        </button></h2>
-        <div id="graph-svg" class="accordion-collapse collapse show" aria-labelledby="graph-heading"></div>
-      </div>
-      <div id="table" class="zone hidden accordion-item table-responsive">
+      <div id="overview" class="zone hidden accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#table-table" 
-          aria-expanded="true" aria-controls="table-table">
-          Table of annotations
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#overview-overview"
+          aria-expanded="false" aria-controls="overview-overview">
+          Overview of annotations
         </button></h2>
-        <div id="table-table" class="accordion-collapse collapse show" aria-labelledby="table-heading">
-        <table class="table table-striped table-bordered table-hover accordion-body">
-          <thead>
-            <tr>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-          </tbody>
-        </table>
+        <div id="overview-overview" class="accordion-collapse collapse" aria-labelledby="overview-heading">
+          <div class="accordion-body">
+            <div class="d-flex flex-row flex-wrap">
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/diamond.png" alt="diamond" width="70" height="70">
+                <p>Total number of questions: <span id="total-questions">0</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/square.png" alt="square" width="70" height="70">
+                <p>Total number of comments: <span id="total-comments">0</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/triangle.png" alt="triangle" width="70" height="70">
+                <p>Total number of<br />defects: <span id="total-defects">0</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/resource.png" alt="resource" width="70" height="70">
+                <p>Total number of<br />thesauri: <span id="total-thesauri">0</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/star.png" alt="star" width="70" height="70">
+                <p>Total number of<br />other annotations: <span id="total-others">0</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/person.png" alt="person" width="70" height="70">
+                <p>Total number of<br />authors: <span id="total-authors">0</span></p>
+                <p>Most active<br />author: <span id="most-active-author" style="overflow-wrap: break-word;">None</span></p>
+              </div>
+              <div class="block d-flex flex-column align-items-center">
+                <img src="images/web.png" alt="web" width="70" height="70">
+                <p>Total number of<br />web pages: <span id="total-webpages">0</span></p>
+                <p>Most annotated<br />web page: <span id="most-annotated-webpage" style="overflow-wrap: break-word;">None</span></p>
+              </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div id="overview" class="zone hidden accordion-item">
+    <div id="table" class="zone hidden accordion-item table-responsive">
       <h2 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#overview-overview"
-        aria-expanded="true" aria-controls="overview-overview" aria-expanded="true">
-        Overview of annotations
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#table-table" 
+        aria-expanded="true" aria-controls="table-table">
+        Table of annotations
       </button></h2>
-      <div id="overview-overview" class="accordion-collapse collapse show" aria-labelledby="overview-heading">
-        <div class="accordion-body">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/diamond.png" alt="diamond" width="70" height="70">
-              <p>Total number of questions: <span id="total-questions">0</span></p>
+      <div id="table-table" class="accordion-collapse collapse show" aria-labelledby="table-heading">
+      <table class="table table-striped table-bordered table-hover accordion-body">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+      </table>
+      </div>
+    </div>
+      <div id="filters" class="zone accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filters-filters"
+          aria-expanded="true" aria-controls="filters-filters">
+          Filters
+        </button></h2>
+        <div id="filters-filters" class="accordion-collapse collapse show" aria-labelledby="filters-heading">
+          <div class="accordion-body">
+            <div class="d-flex flex-row flex-wrap justify-content-between">
+              <div class="form-check form-switch d-flex flex-nowrap justify-content-between p-0">
+                <label class="form-check-label" for="regroup-switch">Summarize</label>
+                <input class="form-check-input mx-2" type="checkbox" id="regroup-switch" onclick="toggleRegroup(this)"></input>
+                <label class="form-check-label" for="regroup-switch">All</label>
+              </div>
+              <div class="annotation-type-filter">
+                <img src="images/diamond.png" alt="diamond" width="35" height="35" onclick="toggleState(this, 'question')">
+                <img src="images/square.png" alt="square" width="35" height="35" onclick="toggleState(this, 'comment')">
+                <img src="images/triangle.png" alt="triangle" width="35" height="35" onclick="toggleState(this, 'defect')">
+                <img src="images/resource.png" alt="resource" width="35" height="35" onclick="toggleState(this, 'thesaurus')">
+                <img src="images/star.png" alt="star" width="35" height="35" onclick="toggleState(this, 'other')">
+              </div>
+              <!-- date slider -->
+              <div class="date-slider">
+                <label for="amount">Date range:</label>
+                <input type="text" id="amount" size="21"/>
+                <div id="slider-range"></div>
+              </div>
+              <!-- selects for "objectDescirption" and "objectPosition" -->
+              <div class="object-select-description">
+                <label for="objectDescription">Object Description:</label>
+                <select id="objectDescription" class="form-select" aria-label="Default select example">
+                  <option selected>Choose...</option>
+                </select>
+              </div>
+              <div class="object-select-position">
+                <label for="objectPosition">Object Position:</label>
+                <select id="objectPosition" class="form-select" aria-label="Default select example">
+                  <option selected>Choose...</option>
+                </select>
+              </div>
             </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/square.png" alt="square" width="70" height="70">
-              <p>Total number of comments: <span id="total-comments">0</span></p>
-            </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/triangle.png" alt="triangle" width="70" height="70">
-              <p>Total number of<br />defects: <span id="total-defects">0</span></p>
-            </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/resource.png" alt="resource" width="70" height="70">
-              <p>Total number of<br />thesauri: <span id="total-thesauri">0</span></p>
-            </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/star.png" alt="star" width="70" height="70">
-              <p>Total number of<br />other annotations: <span id="total-others">0</span></p>
-            </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/person.png" alt="person" width="70" height="70">
-              <p>Total number of<br />authors: <span id="total-authors">0</span></p>
-              <p>Most active<br />author: <span id="most-active-author" style="overflow-wrap: break-word;">None</span></p>
-            </div>
-            <div class="block d-flex flex-column align-items-center">
-              <img src="images/web.png" alt="web" width="70" height="70">
-              <p>Total number of<br />web pages: <span id="total-webpages">0</span></p>
-              <p>Most annotated<br />web page: <span id="most-annotated-webpage" style="overflow-wrap: break-word;">None</span></p>
-            </div>
+          </div>
         </div>
       </div>
     </div>

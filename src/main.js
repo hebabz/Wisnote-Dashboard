@@ -11,8 +11,8 @@ function filePathToData() {
   };
   reader.onloadend = function () {
     fillTable(fileData);
-    fillGraph(fileData);
     fillOverview(fileData);
+    fillFilters(fileData);
   };
   reader.readAsText(filePath);
 }
@@ -30,8 +30,8 @@ function httpRequest(url) {
 
     reader.onloadend = function () {
       fillTable(fileData);
-      fillGraph(fileData);
       fillOverview(fileData);
+      fillFilters(fileData);
     };
     reader.readAsText(xhr.response);
   };

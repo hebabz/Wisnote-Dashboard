@@ -22,6 +22,9 @@ function dataToJson(data) {
         objectValue,
         objectType,
       };
+      if (objectPath) {
+        formattedObj.objectPosition = objectPath.objectPosition;
+      }
       return formattedObj;
     });
 
