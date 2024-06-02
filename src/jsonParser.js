@@ -3,6 +3,16 @@ annotations = null;
 function dataToJson(data) {
   annotations = JSON.parse(data);
 
+  //hide loading screen and show error screen if data is not in correct format
+  if (!annotations.hasOwnProperty("annotations")) {
+    document.querySelector("#loading").style.display = "none";
+    document.querySelector("#loading > *").style.display = "none";
+    document.querySelector("#error").style.display = "block";
+    document.querySelector("#error-message").innerHTML = "Error: Data is not in correct format";
+    document.querySelector("#upload").disabled = false;
+    return;
+  }
+
   const formattedAnnotations = annotations.annotations.map((annotation) => {
     const {
       _id,
