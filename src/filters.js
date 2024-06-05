@@ -140,6 +140,9 @@ function filterByDate() {
   const minDate = new Date(document.getElementById("dateFrom").value);
   const maxDate = new Date(document.getElementById("dateTo").value);
 
+  minDate.setHours(0, 0, 0, 0);
+  maxDate.setHours(23, 59, 59, 999);
+
   annotationsForFilters = annotationsForFilters.filter((annotation) => {
     return (
       new Date(annotation.createdAt) >= minDate &&

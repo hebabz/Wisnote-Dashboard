@@ -30,12 +30,12 @@ body {
 }
 
 .hidden, .hidden-annotation, .hidden-date, .hidden-row {
-  display: none;
+  display: none!important;
 }
 
 .accordion-item {
   border: 0;
-  box-shadow: 0px 0px 1px 1px;
+  box-shadow: #b0b0b0 0px 0px 1px 1px;
 }
 
 .accordion-header > button {
@@ -46,6 +46,7 @@ body {
 .accordion-button:not(.collapsed) {
   background-color: white!important;
   color: black!important;
+  box-shadow: none!important;
 }
 
 #overview {
@@ -97,13 +98,16 @@ thead {
   font-weight: 300;
 }
 
+ul.dropdown-menu {
+  padding: 10px;
+}
+
 li > input {
   cursor: pointer;
 }
 
 .single {
   width: 20px;
-  cursor: default;
 }
 
 .tooltip > .tooltip-inner {
@@ -129,7 +133,7 @@ li > input {
   cursor: pointer;
 }
 
-.low-opacity {
+.low-opacity, .manual-hide {
   opacity: 0.5;
 }
 

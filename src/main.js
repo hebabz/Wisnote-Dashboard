@@ -15,10 +15,6 @@ function toggleUpload(value) {
   }
 }
 
-function upload() {
-  uploadFile();
-}
-
 function filePathToData() {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -27,6 +23,7 @@ function filePathToData() {
   };
   reader.onloadend = function () {
     fillTable(fileData);
+    sortTable(false);
     fillOverview(fileData);
     fillFilters(fileData);
   };
@@ -51,7 +48,6 @@ function httpRequest(url) {
         zone.classList.remove("hidden");
       });
       document.querySelector("#upload").disabled = false;
-      //else if fail then display error message
     } else if (xhr.readyState == 4 && xhr.status != 200) {
       document.querySelector("#loading").style.display = "none";
       document.querySelector("#loading > *").style.display = "none";
@@ -64,6 +60,9 @@ function httpRequest(url) {
 }
 
 function uploadFile() {
+  if (!document.querySelector("#file").files[0] && !document.querySelector("#url").value) {
+    return;
+  }
   document.querySelectorAll(".zone").forEach((zone) => {
     if(!zone.classList.contains("hidden")) {
       zone.classList.add("hidden");

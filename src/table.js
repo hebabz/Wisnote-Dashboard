@@ -8,10 +8,12 @@ const symbolsImages = {
 
 var sortById = 0;
 
+var removedAnnotations = [];
+
 function fillTable(tableData) {
   const columns = [
     "Web pages",
-    "Total",
+    "Total visible annotations",
     "Object annotations",
     "Web page annotations",
     "Website annotations",
@@ -39,20 +41,11 @@ function fillTable(tableData) {
     return uri;
   }
 
-  const formattedWebPages = [
-    ...new Set(
-      webPages.map((url) => {
-        return fromURItoLastPart(url);
-      })
-    ),
-  ];
-
   const headerRow = document.getElementsByTagName("tr")[0];
   columns.forEach((key) => {
     const th = document.createElement("th");
     th.textContent = key;
     if (key === "Web pages") {
-      /* Sort by */
       const sortBy = document.createElement("div");
       sortBy.classList.add("sort-by");
       const label = document.createElement("label");
@@ -135,7 +128,11 @@ function fillTable(tableData) {
         input.setAttribute("checked", true);
         input.onclick = function () {
           const selectAll = document.getElementById("selectAll");
-          if (document.querySelectorAll("#filter-web-pages input:checked:not(#selectAll)").length === webPages.length) {
+          if (
+            document.querySelectorAll(
+              "#filter-web-pages input:checked:not(#selectAll)"
+            ).length === webPages.length
+          ) {
             selectAll.checked = true;
           } else {
             selectAll.checked = false;
@@ -172,9 +169,16 @@ function fillTable(tableData) {
     row.appendChild(pageCell);
 
     const totalCell = document.createElement("td");
+    const removedAnnotationsInTable = removedAnnotations.filter((id) =>
+      tableData.some((rowData) => rowData["_id"] === id)
+    );
+    const removedAnnotationsCount = removedAnnotationsInTable.filter(
+      (id) => tableData.find((rowData) => rowData["_id"] === id)["pageUrl"] === pageUrl
+    ).length;
+    console.log(pageUrl, removedAnnotationsCount);
     const totalAnnotations = tableData.filter(
       (rowData) => rowData["pageUrl"] === pageUrl
-    ).length;
+    ).length - removedAnnotationsCount;
     totalCell.classList.add("text-center");
     totalCell.classList.add("total-cell");
     totalCell.textContent = totalAnnotations;
@@ -188,23 +192,26 @@ function fillTable(tableData) {
       );
       const cell = document.createElement("td");
       annotationTypes.forEach((annotationType) => {
-        const annotationTypeLength = annotations.filter(
+        const cellAnnotationsOfType = annotations.filter(
           (rowData) => rowData["annotationType"] === annotationType
-        ).length;
+        );
+        const annotationTypeLength = cellAnnotationsOfType.length;
         if (annotationTypeLength > 0) {
-          const link = document.createElement("a");
-          link.href = "javascript:void(0)";
-          link.classList.add("position-relative");
-          link.style.display = "inline-block";
-          const img = document.createElement("img");
-          img.src = `./images/${symbolsImages[annotationType]}`;
+          link = null;
           if (annotationTypeLength > 1) {
+            link = document.createElement("a");
+            link.href = "javascript:void(0)";
+            link.classList.add("position-relative");
+            link.style.display = "inline-block";
+            const img = document.createElement("img");
+            img.src = `./images/${symbolsImages[annotationType]}`;
             img.classList.add("multiple");
             img.onclick = extendAnnotation(annotations, annotationType);
             img.setAttribute(
               "alt",
               annotationTypeLength + " " + annotationType + " annotations"
             );
+            img.classList.add("mx-1");
             const badge = document.createElement("span");
             badge.classList.add("badge");
             badge.classList.add("bg-danger");
@@ -212,16 +219,10 @@ function fillTable(tableData) {
             badge.classList.add("position-absolute");
             badge.textContent = annotationTypeLength;
             link.appendChild(badge);
+            link.appendChild(img);
           } else {
-            img.classList.add("single");
-            link.setAttribute("data-toggle", "tooltip");
-            link.setAttribute("data-placement", "top");
-            link.setAttribute("data-bs-html", "true");
-            link.setAttribute("title", tooltipContent(annotations[0]));
-            img.setAttribute("alt", annotationType + " annotation");
+            link = createSingleAnnotation(cellAnnotationsOfType[0], false);
           }
-          img.classList.add("mx-1");
-          link.appendChild(img);
           cell.appendChild(link);
         }
       });
@@ -274,32 +275,50 @@ function fillTable(tableData) {
     });
   }
 
+  function createSingleAnnotation(annotation, isChild) {
+    const link = document.createElement("a");
+    link.href = "javascript:void(0)";
+    link.setAttribute("data-toggle", "tooltip");
+    link.setAttribute("data-placement", "top");
+    link.setAttribute("data-bs-html", "true");
+    link.setAttribute("title", tooltipContent(annotation));
+    const img = document.createElement("img");
+    img.src = `./images/${symbolsImages[annotation["annotationType"]]}`;
+    img.setAttribute("alt", annotation["annotationType"] + " annotation");
+    img.setAttribute("id", annotation["_id"]);
+    img.classList.add("single");
+    img.classList.add("mx-1");
+    if (isChild) img.classList.add("child");
+    if(removedAnnotations.includes(annotation["_id"])) link.classList.add("manual-hide");
+    img.onclick = function () {
+      const cell = this.parentElement.parentElement;
+      this.parentElement.classList.toggle("manual-hide");
+      const totalCell = cell.parentElement.children[1];
+      const total = parseInt(totalCell.textContent);
+      if (this.parentElement.classList.contains("manual-hide")) {
+        removedAnnotations.push(this.id);
+        totalCell.textContent = total - 1;
+      } else {
+        removedAnnotations = removedAnnotations.filter((id) => id !== this.id);
+        totalCell.textContent = total + 1;
+      }
+      if (this.parentElement.classList.contains("hidden-annotation")) {
+        img.parentElement.classList.add("hidden-annotation");
+      }
+    };
+    link.appendChild(img);
+    return link;
+  }
+
   function extendAnnotation(annotations, annotationType) {
     return function () {
       const cell = this.parentElement.parentElement;
       this.parentElement.classList.add("hidden");
       annotations.forEach((annotation) => {
         if (annotation["annotationType"] === annotationType) {
-          const link = document.createElement("a");
-          link.href = "javascript:void(0)";
-          link.setAttribute("data-toggle", "tooltip");
-          link.setAttribute("data-placement", "top");
-          link.setAttribute("data-bs-html", "true");
-          link.setAttribute("title", tooltipContent(annotation));
-          const img = document.createElement("img");
-          img.src = `./images/${symbolsImages[annotation["annotationType"]]}`;
-          img.setAttribute("alt", annotation["annotationType"] + " annotation");
-          img.classList.add("single");
-          img.classList.add("mx-1");
-          img.classList.add("child");
-          if (this.parentElement.classList.contains("hidden-annotation")) {
-            img.parentElement.classList.add("hidden-annotation");
-          }
-          link.appendChild(img);
-          cell.appendChild(link);
+          cell.appendChild(createSingleAnnotation(annotation, true));
         }
       });
-      //enable tooltips
       document
         .querySelectorAll('[data-toggle="tooltip"]')
         .forEach((tooltip) => {
@@ -310,7 +329,6 @@ function fillTable(tableData) {
     };
   }
 
-  //enable tooltips
   document.querySelectorAll('[data-toggle="tooltip"]').forEach((item) => {
     new bootstrap.Tooltip(item);
   });
@@ -320,7 +338,7 @@ function fillTable(tableData) {
 
 function sortTable(isRefreshed) {
   const sortBy = document.getElementById("sortBy");
-  if(isRefreshed) {
+  if (isRefreshed) {
     sortBy.options[sortById].selected = true;
   } else {
     sortById = sortBy.selectedIndex;
@@ -330,8 +348,8 @@ function sortTable(isRefreshed) {
   rows.shift();
   rows.sort((a, b) => {
     if (sortById == 0 || sortById == 1) {
-      const aPage = a.children[0].textContent;
-      const bPage = b.children[0].textContent;
+      const aPage = a.children[0].children[0].href;
+      const bPage = b.children[0].children[0].href;
       if (sortById == 0) {
         return aPage < bPage ? -1 : 1;
       } else {
@@ -350,7 +368,7 @@ function sortTable(isRefreshed) {
   rows.forEach((row) => {
     tbody.appendChild(row);
   });
-  if(sortById != 2 && sortById != 3) return;
+  if (sortById != 2 && sortById != 3) return;
   //sort annotations in each cell per date
   const cells = document.querySelectorAll("td");
   cells.forEach((cell) => {
