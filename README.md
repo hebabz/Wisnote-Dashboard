@@ -34,7 +34,7 @@ The goal of the project is to generate a visual representation of these annotati
 - Filter by object description: show/hide annotations
 
 ## Enhancements possible
-- Date should be a kind of a slider like in this example: ![image](https://github.com/hebabz/Wisnote-Dashboard/assets/42966652/fb7bbbc0-37e9-4677-82dc-14e4cda1b4fe).
+- The date filter should be a kind of a slider like in this example: ![image](https://github.com/hebabz/Wisnote-Dashboard/assets/42966652/fb7bbbc0-37e9-4677-82dc-14e4cda1b4fe).
 - Lacks colors and liveliness, the design might feel a bit heavy UI-wise.
 - Find a better logo
 
