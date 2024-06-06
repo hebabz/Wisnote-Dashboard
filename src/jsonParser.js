@@ -8,12 +8,14 @@ function dataToJson(data) {
     document.querySelector("#loading").style.display = "none";
     document.querySelector("#loading > *").style.display = "none";
     document.querySelector("#error").style.display = "block";
-    document.querySelector("#error-message").innerHTML = "Error: Data is not in correct format";
+    document.querySelector("#error-message").innerHTML =
+      "Error: Data is not in correct format";
     document.querySelector("#upload").disabled = false;
     return;
   }
 
   const formattedAnnotations = annotations.annotations.map((annotation) => {
+    // retrieval of an annotation object
     const {
       _id,
       pageUrl,
@@ -25,6 +27,7 @@ function dataToJson(data) {
       createdAt,
       updatedAt,
     } = annotation;
+    // creating our own format for the annotation object
     const formattedItem = item.map((obj) => {
       const { objectPath, objectDescription, objectValue, objectType } = obj;
       const formattedObj = {

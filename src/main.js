@@ -3,6 +3,7 @@ var fileData = null;
 var filePath = null;
 var fileURL = null;
 
+// picking the way to upload the file
 function toggleUpload(value) {
   const upload = document.querySelector("#file");
   const url = document.querySelector("#url");
@@ -15,6 +16,36 @@ function toggleUpload(value) {
   }
 }
 
+// clicking the upload button
+function uploadFile() {
+  if (!document.querySelector("#file").files[0] && !document.querySelector("#url").value) {
+    return;
+  }
+  document.querySelectorAll(".zone").forEach((zone) => {
+    if(!zone.classList.contains("hidden")) {
+      zone.classList.add("hidden");
+    }
+  });
+  document.querySelector("thead > tr").innerHTML = "";
+  document.querySelector("#table-body").innerHTML = "";
+  document.querySelector("#error").style.display = "none";
+
+  const file = document.querySelector("#file").files[0];
+  if (file) {
+    filePath = file;
+    filePathToData();
+    document.querySelectorAll(".zone").forEach((zone) => {
+      zone.classList.remove("hidden");
+    });
+    fileURL = null;
+  } else if(document.querySelector("#url").value) {
+    fileURL = document.querySelector("#url").value;
+    httpRequest(fileURL);
+    filePath = null;
+  }
+}
+
+// uploading the file by browsing the file system
 function filePathToData() {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -30,6 +61,7 @@ function filePathToData() {
   reader.readAsText(filePath);
 }
 
+// uploading the file by providing the URL
 function httpRequest(url) {
   document.querySelector("#loading").style.display = "";
   document.querySelector("#loading > *").style.display = "";
@@ -57,32 +89,4 @@ function httpRequest(url) {
     }
   };
   xhr.send();
-}
-
-function uploadFile() {
-  if (!document.querySelector("#file").files[0] && !document.querySelector("#url").value) {
-    return;
-  }
-  document.querySelectorAll(".zone").forEach((zone) => {
-    if(!zone.classList.contains("hidden")) {
-      zone.classList.add("hidden");
-    }
-  });
-  document.querySelector("thead > tr").innerHTML = "";
-  document.querySelector("#table-body").innerHTML = "";
-  document.querySelector("#error").style.display = "none";
-
-  const file = document.querySelector("#file").files[0];
-  if (file) {
-    filePath = file;
-    filePathToData();
-    document.querySelectorAll(".zone").forEach((zone) => {
-      zone.classList.remove("hidden");
-    });
-    fileURL = null;
-  } else if(document.querySelector("#url").value) {
-    fileURL = document.querySelector("#url").value;
-    httpRequest(fileURL);
-    filePath = null;
-  }
 }

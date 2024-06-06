@@ -31,6 +31,7 @@ function fillTable(tableData) {
 
   const webPages = [...new Set(tableData.map((rowData) => rowData["pageUrl"]))];
 
+  // humanize the URI into actual names
   function fromURItoLastPart(uri) {
     const lastSlashIndex = uri.lastIndexOf("/");
     if (lastSlashIndex !== -1) {
@@ -41,11 +42,14 @@ function fillTable(tableData) {
     return uri;
   }
 
+  // constructing the header of the table
   const headerRow = document.getElementsByTagName("tr")[0];
   columns.forEach((key) => {
     const th = document.createElement("th");
     th.textContent = key;
+    //first cell: web pages
     if (key === "Web pages") {
+      //constructing the sort feature
       const sortBy = document.createElement("div");
       sortBy.classList.add("sort-by");
       const label = document.createElement("label");
@@ -76,7 +80,7 @@ function fillTable(tableData) {
       sortBy.appendChild(select);
       th.appendChild(sortBy);
 
-      /* Filter web pages */
+      // constructing the web pages filter feature
       const filterWebPages = document.createElement("div");
       filterWebPages.classList.add("filter-web-pages");
       const button = document.createElement("button");
@@ -87,7 +91,6 @@ function fillTable(tableData) {
       button.setAttribute("data-bs-toggle", "dropdown");
       button.setAttribute("aria-expanded", "false");
       button.textContent = "Filter web pages:";
-
       filterWebPages.appendChild(button);
       const ul = document.createElement("ul");
       ul.classList.add("dropdown-menu");
@@ -116,6 +119,7 @@ function fillTable(tableData) {
       labelSelectAll.textContent = "Select all";
       li.appendChild(labelSelectAll);
       ul.appendChild(li);
+      //constructing the filter checkboxes
       webPages.forEach((page) => {
         const pageName = fromURItoLastPart(page);
         const li = document.createElement("li");
@@ -156,8 +160,11 @@ function fillTable(tableData) {
   const tbody = document.getElementById("table-body");
 
   webPages.forEach((pageUrl) => {
+    // constructing a row for each web page
     const row = document.createElement("tr");
     row.id = pageUrl;
+
+    // constructing the web page name cell
     const pageCell = document.createElement("td");
     const pageLink = document.createElement("a");
     pageLink.href = pageUrl;
@@ -168,22 +175,25 @@ function fillTable(tableData) {
     pageCell.appendChild(pageLink);
     row.appendChild(pageCell);
 
+    // constructing the total annotations cell
     const totalCell = document.createElement("td");
     const removedAnnotationsInTable = removedAnnotations.filter((id) =>
       tableData.some((rowData) => rowData["_id"] === id)
     );
     const removedAnnotationsCount = removedAnnotationsInTable.filter(
-      (id) => tableData.find((rowData) => rowData["_id"] === id)["pageUrl"] === pageUrl
+      (id) =>
+        tableData.find((rowData) => rowData["_id"] === id)["pageUrl"] ===
+        pageUrl
     ).length;
-    console.log(pageUrl, removedAnnotationsCount);
-    const totalAnnotations = tableData.filter(
-      (rowData) => rowData["pageUrl"] === pageUrl
-    ).length - removedAnnotationsCount;
+    const totalAnnotations =
+      tableData.filter((rowData) => rowData["pageUrl"] === pageUrl).length -
+      removedAnnotationsCount;
     totalCell.classList.add("text-center");
     totalCell.classList.add("total-cell");
     totalCell.textContent = totalAnnotations;
     row.appendChild(totalCell);
 
+    // constructing the annotations of each connection type
     connectionTypes.forEach((connectionType) => {
       const annotations = tableData.filter(
         (rowData) =>
@@ -191,6 +201,7 @@ function fillTable(tableData) {
           rowData["connectionType"] === connectionType
       );
       const cell = document.createElement("td");
+      // constructing the annotations of each annotation type
       annotationTypes.forEach((annotationType) => {
         const cellAnnotationsOfType = annotations.filter(
           (rowData) => rowData["annotationType"] === annotationType
@@ -198,6 +209,7 @@ function fillTable(tableData) {
         const annotationTypeLength = cellAnnotationsOfType.length;
         if (annotationTypeLength > 0) {
           link = null;
+          // in case of multiple annotations of the same type
           if (annotationTypeLength > 1) {
             link = document.createElement("a");
             link.href = "javascript:void(0)";
@@ -206,7 +218,9 @@ function fillTable(tableData) {
             const img = document.createElement("img");
             img.src = `./images/${symbolsImages[annotationType]}`;
             img.classList.add("multiple");
-            img.onclick = extendAnnotation(annotations, annotationType);
+            img.onclick = function () {
+              extendAnnotation(this, annotations, annotationType);
+            };
             img.setAttribute(
               "alt",
               annotationTypeLength + " " + annotationType + " annotations"
@@ -221,6 +235,7 @@ function fillTable(tableData) {
             link.appendChild(badge);
             link.appendChild(img);
           } else {
+            // in case of a single annotation
             link = createSingleAnnotation(cellAnnotationsOfType[0], false);
           }
           cell.appendChild(link);
@@ -267,6 +282,7 @@ function fillTable(tableData) {
     );
   }
 
+  // example: 2021-07-01T00:00:00.000Z -> 01/07/2021
   function formatDate(date) {
     return new Date(date).toLocaleDateString("fr-FR", {
       day: "2-digit",
@@ -289,7 +305,9 @@ function fillTable(tableData) {
     img.classList.add("single");
     img.classList.add("mx-1");
     if (isChild) img.classList.add("child");
-    if(removedAnnotations.includes(annotation["_id"])) link.classList.add("manual-hide");
+    if (removedAnnotations.includes(annotation["_id"]))
+      link.classList.add("manual-hide");
+    // add the event listener to hide the single annotation
     img.onclick = function () {
       const cell = this.parentElement.parentElement;
       this.parentElement.classList.toggle("manual-hide");
@@ -310,23 +328,21 @@ function fillTable(tableData) {
     return link;
   }
 
-  function extendAnnotation(annotations, annotationType) {
-    return function () {
-      const cell = this.parentElement.parentElement;
-      this.parentElement.classList.add("hidden");
-      annotations.forEach((annotation) => {
-        if (annotation["annotationType"] === annotationType) {
-          cell.appendChild(createSingleAnnotation(annotation, true));
-        }
-      });
-      document
-        .querySelectorAll('[data-toggle="tooltip"]')
-        .forEach((tooltip) => {
-          new bootstrap.Tooltip(tooltip);
-        });
+  // if you click on the multiple annotations symbol, it will show all the annotations of the same type
+  function extendAnnotation(e, annotations, annotationType) {
+    const cell = e.parentElement.parentElement;
+    e.parentElement.classList.add("hidden");
+    annotations.forEach((annotation) => {
+      if (annotation["annotationType"] === annotationType) {
+        cell.appendChild(createSingleAnnotation(annotation, true));
+      }
+    });
 
-      sortTable(true);
-    };
+    document.querySelectorAll('[data-toggle="tooltip"]').forEach((tooltip) => {
+      new bootstrap.Tooltip(tooltip);
+    });
+
+    sortTable(true);
   }
 
   document.querySelectorAll('[data-toggle="tooltip"]').forEach((item) => {
@@ -347,6 +363,7 @@ function sortTable(isRefreshed) {
   const rows = Array.from(document.getElementsByTagName("tr"));
   rows.shift();
   rows.sort((a, b) => {
+    // sort rows by web pages names
     if (sortById == 0 || sortById == 1) {
       const aPage = a.children[0].children[0].href;
       const bPage = b.children[0].children[0].href;
@@ -355,6 +372,7 @@ function sortTable(isRefreshed) {
       } else {
         return aPage < bPage ? 1 : -1;
       }
+      // sort rows by annotations totals
     } else if (sortById == 4 || sortById == 5) {
       const aTotal = a.children[1].textContent;
       const bTotal = b.children[1].textContent;
@@ -369,8 +387,8 @@ function sortTable(isRefreshed) {
     tbody.appendChild(row);
   });
   if (sortById != 2 && sortById != 3) return;
-  //sort annotations in each cell per date
   const cells = document.querySelectorAll("td");
+  // sort annotations by date in each cell
   cells.forEach((cell) => {
     const imgs = cell.querySelectorAll("img.single");
     const annotations = [];
