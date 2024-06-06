@@ -25,13 +25,13 @@ The goal of the project is to generate a visual representation of these annotati
 - Each annotation type is represented once per cell, thus if there are many annotations of a same type they are automatically grouped in bigger symbols (size "Normal"). If not then a "Small" annotation is displayed.
 - Each "Small" annotation is accompanied by a tooltip, and can be clicked to hide/show it.
 - Each "Normal" annotation is accompanied with a counter of annotation (hidden or not), and can be clicked to generate single representations of these annotations.
-- Filter by web page(s): show/hide rows
-- Sort by: date (asc/desc), alphabetical (asc/desc), total (asc/desc)
-- Summarize or show all: develop/regroup all "Normal" annotations
-- Filter by annotation types: show/hide every annotations of the table of said type
-- From/To: show/hide annotations whose dates don't match the slot
-- Filter by object position: show/hide annotations 
-- Filter by object description: show/hide annotations
+- Filter by web page(s): show/hide rows.
+- Sort by: date (asc/desc), alphabetical (asc/desc), total (asc/desc).
+- Summarize or show all: develop/regroup all "Normal" annotations.
+- Filter by annotation types: show/hide every annotations of the table of said type.
+- From/To: show/hide annotations whose dates don't match the slot.
+- Filter by object position: show/hide annotations.
+- Filter by object description: show/hide annotations.
 
 ## Enhancements possible
 - The date filter should be a kind of a slider like in this example: ![image](https://github.com/hebabz/Wisnote-Dashboard/assets/42966652/fb7bbbc0-37e9-4677-82dc-14e4cda1b4fe).
